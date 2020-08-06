@@ -18,7 +18,11 @@ const categories = {
             })
     },
     getAllcategories: (req, res) => {
-        categoryModels.getAllcategories()
+        const search = req.query.search
+        const sort = req.query.sort
+        const order = req.query.order
+
+        categoryModels.getAllcategories(search, sort, order)
             .then((result) => {
                 resultCategories = result;
                 helpers.response(res, resultCategories, 200, null)

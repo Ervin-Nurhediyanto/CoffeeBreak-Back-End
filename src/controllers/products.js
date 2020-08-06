@@ -22,7 +22,9 @@ const products = {
         const search = req.query.search
         const sort = req.query.sort
         const order = req.query.order
-        productModels.getAllproduct(search, sort, order)
+        const page = req.query.page
+        const limit = req.query.limit
+        productModels.getAllproduct(search, sort, order, page, limit)
             .then((result) => {
                 resultProducts = result;
                 if (resultProducts != '') {

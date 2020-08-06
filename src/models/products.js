@@ -14,34 +14,11 @@ const products = {
         })
     },
 
-
-    // getAllproduct: (search) => {
-    //     return new Promise((resolve, reject) => {
-    //         if (search != "") {
-    //             connection.query(`SELECT * FROM category INNER JOIN product ON product.idCategory = category.id WHERE product.name LIKE '%${search}%'`, (err, result) => {
-    //                 if (!err) {
-    //                     resolve(result)
-    //                 } else {
-    //                     reject(new Error(err))
-    //                 }
-    //             })
-    //         } else {
-    //             connection.query(`SELECT * FROM category INNER JOIN product ON product.idCategory = category.id`, (err, result) => {
-    //                 if (!err) {
-    //                     resolve(result)
-    //                 } else {
-    //                     reject(new Error(err))
-    //                 }
-    //             })
-    //         }
-
-    //     })
-    // },
-
-    getAllproduct: (search, sort, order) => {
+    getAllproduct: (search, sort, order, page, limit) => {
         return new Promise((resolve, reject) => {
             let searchProduct = '';
             let sortProduct = '';
+            let pageProduct = '';
 
             if (search != null) {
                 searchProduct = `WHERE product.name LIKE '%${search}%'`;
@@ -53,8 +30,17 @@ const products = {
                     sortProduct = `ORDER BY ${sort} ASC`
                 }
             }
+            if (page != null) {
+                if (limit != null) {
+                    let pageNumber = (page - 1) * limit
+                    pageProduct = `LIMIT ${limit} OFFSET ${pageNumber}`
+                } else {
+                    let defaultPageNumber = (page - 1) * 3
+                    pageProduct = `LIMIT 3 OFFSET ${defaultPageNumber}`
+                }
+            }
 
-            connection.query(`SELECT * FROM category INNER JOIN product ON product.idCategory = category.id ${searchProduct} ${sortProduct}`, (err, result) => {
+            connection.query(`SELECT * FROM category INNER JOIN product ON product.idCategory = category.id ${searchProduct} ${sortProduct} ${pageProduct}`, (err, result) => {
                 if (!err) {
                     resolve(result)
                 } else {
