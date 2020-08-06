@@ -15,9 +15,46 @@ const products = {
     },
 
 
-    getAllproduct: () => {
+    // getAllproduct: (search) => {
+    //     return new Promise((resolve, reject) => {
+    //         if (search != "") {
+    //             connection.query(`SELECT * FROM category INNER JOIN product ON product.idCategory = category.id WHERE product.name LIKE '%${search}%'`, (err, result) => {
+    //                 if (!err) {
+    //                     resolve(result)
+    //                 } else {
+    //                     reject(new Error(err))
+    //                 }
+    //             })
+    //         } else {
+    //             connection.query(`SELECT * FROM category INNER JOIN product ON product.idCategory = category.id`, (err, result) => {
+    //                 if (!err) {
+    //                     resolve(result)
+    //                 } else {
+    //                     reject(new Error(err))
+    //                 }
+    //             })
+    //         }
+
+    //     })
+    // },
+
+    getAllproduct: (search, sort, order) => {
         return new Promise((resolve, reject) => {
-            connection.query("SELECT * FROM category INNER JOIN product ON product.idCategory = category.id", (err, result) => {
+            let searchProduct = '';
+            let sortProduct = '';
+
+            if (search != null) {
+                searchProduct = `WHERE product.name LIKE '%${search}%'`;
+            }
+            if (sort != null) {
+                if (order != null) {
+                    sortProduct = `ORDER BY ${sort} ${order}`
+                } else {
+                    sortProduct = `ORDER BY ${sort} ASC`
+                }
+            }
+
+            connection.query(`SELECT * FROM category INNER JOIN product ON product.idCategory = category.id ${searchProduct} ${sortProduct}`, (err, result) => {
                 if (!err) {
                     resolve(result)
                 } else {
@@ -27,40 +64,6 @@ const products = {
         })
     },
 
-    getProductBySearch: (search) => {
-        return new Promise((resolve, reject) => {
-            connection.query(`SELECT * FROM category INNER JOIN product ON product.idCategory = category.id WHERE product.name LIKE '%${search}%'`, (err, result) => {
-                if (!err) {
-                    resolve(result)
-                } else {
-                    reject(new Error(err))
-                }
-            })
-        })
-    },
-
-    getProductBySort: (sort) => {
-        return new Promise((resolve, reject) => {
-            connection.query(`SELECT * FROM category INNER JOIN product ON product.idCategory = category.id ORDER BY ${sort} ASC`, (err, result) => {
-                if (!err) {
-                    resolve(result)
-                } else {
-                    reject(new Error(err))
-                }
-            })
-        })
-    },
-    getProductByLimit: (limit) => {
-        return new Promise((resolve, reject) => {
-            connection.query(`SELECT * FROM category INNER JOIN product ON product.idCategory = category.id LIMIT ${limit}`, (err, result) => {
-                if (!err) {
-                    resolve(result)
-                } else {
-                    reject(new Error(err))
-                }
-            })
-        })
-    },
     updateProduct: (id, data) => {
         return new Promise((resolve, reject) => {
             connection.query("UPDATE product SET ? WHERE id = ?", [data, id], (err, result) => {

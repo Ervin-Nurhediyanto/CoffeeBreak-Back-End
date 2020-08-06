@@ -19,61 +19,21 @@ const products = {
     },
 
     getAllproduct: (req, res) => {
-        const search = req.query.search;
-        const sort = req.query.sort;
-        const limit = req.query.limit;
-
-        // productModels.getAllproduct()
-        // .then((result) => {
-        //     resultProducts = result;
-        //     helpers.response(res, resultProducts, 200, null)
-
-        // })
-        // .catch((err) => {
-        //     console.log(err)
-        // })
-
-        if (search != "") {
-            productModels.getProductBySearch(search)
-                .then((result) => {
-                    resultProducts = result;
+        const search = req.query.search
+        const sort = req.query.sort
+        const order = req.query.order
+        productModels.getAllproduct(search, sort, order)
+            .then((result) => {
+                resultProducts = result;
+                if (resultProducts != '') {
                     helpers.response(res, resultProducts, 200, null)
-
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
-        } else if (sort != "") {
-            productModels.getProductBySort(sort)
-                .then((result) => {
-                    resultProducts = result;
-                    helpers.response(res, resultProducts, 200, null)
-
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
-        } else if (limit != "") {
-            productModels.getProductByLimit(limit)
-                .then((result) => {
-                    resultProducts = result;
-                    helpers.response(res, resultProducts, 200, null)
-
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
-        } else {
-            productModels.getAllproduct()
-                .then((result) => {
-                    resultProducts = result;
-                    helpers.response(res, resultProducts, 200, null)
-
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
-        }
+                } else {
+                    helpers.response(res, 'Produk yang anda cari tidak ada', 200, null)
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     },
 
     updateProduct: (req, res) => {
