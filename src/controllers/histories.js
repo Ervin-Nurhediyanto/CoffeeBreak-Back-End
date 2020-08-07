@@ -69,11 +69,10 @@ const histories = {
             })
     },
     insertHistory: (req, res) => {
-        const { idProduct, countItem, date } = req.body
+        const { idProduct, countItem } = req.body
         const data = {
             idProduct,
             countItem,
-            date
         }
         historyModels.insertHistory(data)
             .then((result) => {

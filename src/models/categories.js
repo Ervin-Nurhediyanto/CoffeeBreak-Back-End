@@ -1,62 +1,98 @@
 const connection = require('../configs/db')
+const { promise } = require('../configs/db')
 
-const category = {
-    getProductById: (id) =>{
-        return new Promise((resolve, reject) =>{
-            connection.query("SELECT * FROM category WHERE id = ?", id, (err, result) =>{
-                if(!err){
+const categories = {
+    getCategoryById: (id) => {
+        return new Promise((resolve, reject) => {
+            connection.query("SELECT * FROM category WHERE id = ?", id, (err, result) => {
+                if (!err) {
                     resolve(result)
-                }else{
-                    reject( new Error(err))
+                } else {
+                    reject(new Error(err))
                 }
             })
         })
     },
-    getAllproduct: () =>{
-        return new Promise((resolve, reject) =>{
-            connection.query("SELECT * FROM product", (err, result) =>{
-                if(!err){
+    getAllcategory: (search, sort, order, page, limit) => {
+        let searchCategory = '';
+        let sortCategory = '';
+        let pageCategory = '';
+
+        if (search != null) {
+            searchCategory = `WHERE category.nameCategory LIKE '%${search}%'`;
+        }
+        if (sort != null) {
+            if (order != null) {
+                sortCategory = `ORDER BY ${sort} ${order}`
+            } else {
+                sortCategory = `ORDER BY ${sort} ASC`
+            }
+        }
+        if (page != null) {
+            if (limit != null) {
+                let pageNumber = (page - 1) * limit
+                pageCategory = `LIMIT ${limit} OFFSET ${pageNumber}`
+            } else {
+                let defaultPageNumber = (page - 1) * 3
+                pageCategory = `LIMIT 3 OFFSET ${defaultPageNumber}`
+            }
+        }
+        return new Promise((resolve, reject) => {
+
+            if (search != null || sort != null || page != null) {
+                connection.query(`SELECT * FROM product INNER JOIN category ON product.idCategory = category.id ${searchCategory} ${sortCategory} ${pageCategory}`, (err, result) => {
+                    if (!err) {
+                        resolve(result)
+                    } else {
+                        reject(new Error(err))
+                    }
+                })
+            }else {
+                connection.query(`SELECT * FROM category`, (err, result) => {
+                    if (!err) {
+                        resolve(result)
+                    } else {
+                        reject(new Error(err))
+                    }
+                })
+            }
+            
+        })
+    },
+    updateCategory: (id, data) => {
+        return new Promise((resolve, reject) => {
+            connection.query("UPDATE category SET ? WHERE id = ?", [data, id], (err, result) => {
+                if (!err) {
                     resolve(result)
-                }else{
-                    reject( new Error(err))
+                } else {
+                    reject(new Error(err))
                 }
             })
         })
     },
-    updateProduct: (id, data) =>{
-        return new Promise((resolve, reject) =>{
-            connection.query("UPDATE product SET ? WHERE id = ?", [data, id], (err, result)=>{
-                if(!err){
+    deleteCategory: (id) => {
+        return new Promise((resolve, reject) => {
+            connection.query("DELETE FROM category WHERE id = ?", id, (err, result) => {
+                if (!err) {
                     resolve(result)
-                }else{
-                    reject( new Error(err))
+                } else {
+                    reject(new Error(err))
                 }
             })
         })
     },
-    deleteProduct: (id) =>{
-        return new Promise((resolve, reject) =>{
-            connection.query("DELETE FROM product WHERE id = ?", id, (err, result)=>{
-                if(!err){
-                    resolve(result)
-                }else{
-                    reject( new Error(err))
-                }
-            })
-        })
-    },
-    insertProduct: (data) =>{
+    insertCategory: (data) => {
         console.log(data)
-        return new Promise((resolve, reject) =>{
-            connection.query("INSERT INTO product SET ?", data, (err, result)=>{
-                if(!err){
+        return new Promise((resolve, reject) => {
+            connection.query("INSERT INTO category SET ?", data, (err, result) => {
+                if (!err) {
                     resolve(result)
-                }else{
-                    reject( new Error(err))
+                } else {
+                    reject(new Error(err))
                 }
             })
         })
     }
 }
 
-module.exports = category
+module.exports = categories

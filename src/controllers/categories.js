@@ -1,4 +1,4 @@
-const categoryModels = require('../models/category')
+const categoryModels = require('../models/categories')
 const helpers = require('../helpers/helpers')
 
 const categories = {
@@ -17,28 +17,34 @@ const categories = {
                 console.log(err)
             })
     },
-    getAllcategories: (req, res) => {
+
+    getAllcategory: (req, res) => {
         const search = req.query.search
         const sort = req.query.sort
         const order = req.query.order
+        const page = req.query.page
+        const limit = req.query.limit
 
-        categoryModels.getAllcategories(search, sort, order)
+        categoryModels.getAllcategory(search, sort, order, page, limit)
             .then((result) => {
                 resultCategories = result;
-                helpers.response(res, resultCategories, 200, null)
-
+                if (resultCategories != '') {
+                    helpers.response(res, resultCategories, 200, null)
+                } else {
+                    helpers.response(res, 'Kategori tidak ditemukan', 200, null)
+                }
             })
             .catch((err) => {
                 console.log(err)
             })
     },
-    updateCategories: (req, res) => {
+    updateCategory: (req, res) => {
         const id = req.params.id
         const { nameCategory } = req.body
         const data = {
             nameCategory
         }
-        categoryModels.updateCategories(id, data)
+        categoryModels.updateCategory(id, data)
             .then((result) => {
                 const resultCategories = result;
                 console.log(result)
@@ -49,9 +55,9 @@ const categories = {
                 console.log(err)
             })
     },
-    deleteCategories: (req, res) => {
+    deleteCategory: (req, res) => {
         const id = req.params.id
-        categoryModels.deleteCategories(id)
+        categoryModels.deleteCategory(id)
             .then((result) => {
                 resultCategories = result;
                 helpers.response(res, resultCategories, 200, null);
@@ -60,12 +66,12 @@ const categories = {
                 console.log(err)
             })
     },
-    insertCategories: (req, res) => {
-        const { nameCategories } = req.body
+    insertCategory: (req, res) => {
+        const { nameCategory } = req.body
         const data = {
-            nameCategories
+            nameCategory
         }
-        categoryModels.insertCategories(data)
+        categoryModels.insertCategory(data)
             .then((result) => {
                 const resultCategories = result;
                 console.log(result)
