@@ -40,7 +40,7 @@ const histories = {
                 }
             }
 
-            connection.query(`SELECT *, product.price*history.countItem AS 'Total' FROM product INNER JOIN category ON product.idCategory = category.id INNER JOIN history ON history.idproduct = product.id ${searchHistory} ${sortHistory}`, (err, result) => {
+            connection.query(`SELECT *, product.price*history.countItem AS 'Total', + history.date + INTERVAL 1 DAY AS 'date' FROM product INNER JOIN category ON product.idCategory = category.id INNER JOIN history ON history.idproduct = product.id ${searchHistory} ${sortHistory} ${pageHistory}`, (err, result) => {
                 if (!err) {
                     resolve(result)
                 } else {

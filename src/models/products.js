@@ -32,21 +32,28 @@ const products = {
             }
             if (page != null) {
                 if (limit != null) {
-                    let pageNumber = (page - 1) * limit
-                    pageProduct = `LIMIT ${limit} OFFSET ${pageNumber}`
+                    pageProduct = `LIMIT ${limit} OFFSET ${(page - 1) * limit}`
                 } else {
-                    let defaultPageNumber = (page - 1) * 3
-                    pageProduct = `LIMIT 3 OFFSET ${defaultPageNumber}`
+                    pageProduct = `LIMIT 3 OFFSET ${(page - 1) * 3}`
                 }
             }
-
-            connection.query(`SELECT * FROM category INNER JOIN product ON product.idCategory = category.id ${searchProduct} ${sortProduct} ${pageProduct}`, (err, result) => {
-                if (!err) {
-                    resolve(result)
-                } else {
-                    reject(new Error(err))
-                }
-            })
+            if (sort == 'new') {
+                connection.query(`SELECT * FROM category INNER JOIN product ON product.idCategory = category.id INNER JOIN history ON history.idProduct = product.id ${searchProduct} ORDER BY date DESC ${pageProduct}`, (err, result) => {
+                    if (!err) {
+                        resolve(result)
+                    } else {
+                        reject(new Error(err))
+                    }
+                })
+            } else {
+                connection.query(`SELECT * FROM category INNER JOIN product ON product.idCategory = category.id ${searchProduct} ${sortProduct} ${pageProduct}`, (err, result) => {
+                    if (!err) {
+                        resolve(result)
+                    } else {
+                        reject(new Error(err))
+                    }
+                })
+            }
         })
     },
 

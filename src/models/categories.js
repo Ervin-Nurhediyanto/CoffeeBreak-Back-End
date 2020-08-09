@@ -30,11 +30,9 @@ const categories = {
         }
         if (page != null) {
             if (limit != null) {
-                let pageNumber = (page - 1) * limit
-                pageCategory = `LIMIT ${limit} OFFSET ${pageNumber}`
+                pageCategory = `LIMIT ${limit} OFFSET ${(page - 1) * limit}`
             } else {
-                let defaultPageNumber = (page - 1) * 3
-                pageCategory = `LIMIT 3 OFFSET ${defaultPageNumber}`
+                pageCategory = `LIMIT 3 OFFSET ${(page - 1) * 3}`
             }
         }
         return new Promise((resolve, reject) => {

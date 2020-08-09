@@ -22,9 +22,10 @@ const histories = {
         const search = req.query.search
         const sort = req.query.sort
         const order = req.query.order
-        const date = req.query.date
+        const page = req.query.page
+        const limit = req.query.limit
 
-        historyModels.getAllhistory(search, sort, order, date)
+        historyModels.getAllhistory(search, sort, order, page, limit)
             .then((result) => {
                 resulthistories = result;
                 if (resulthistories != '') {
