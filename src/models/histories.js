@@ -29,14 +29,14 @@ const histories = {
                 } else {
                     sortHistory = `ORDER BY ${sort} ASC`
                 }
+            }else {
+                sortHistory = `ORDER BY history.id ASC`
             }
             if (page != null) {
                 if (limit != null) {
-                    let pageNumber = (page - 1) * limit
-                    pageHistory = `LIMIT ${limit} OFFSET ${pageNumber}`
+                    pageHistory = `LIMIT ${limit} OFFSET ${(page - 1) * limit}`
                 } else {
-                    let defaultPageNumber = (page - 1) * 3
-                    pageHistory = `LIMIT 3 OFFSET ${defaultPageNumber}`
+                    pageHistory = `LIMIT 3 OFFSET ${(page - 1) * 3}`
                 }
             }
 
