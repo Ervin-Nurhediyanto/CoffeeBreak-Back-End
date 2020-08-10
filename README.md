@@ -2,10 +2,10 @@
 
 Simple application to CRUD database with node js, Express, and MySQL.
 
-## Table of COntents
+## Table of Contents
 
 - [CoffeeBreak-Back-End](#coffeebreak-back-end)
-  - [Table of COntents](#table-of-contents)
+  - [Table of Contents](#table-of-contents)
   - [General info](#general-info)
   - [Technologies](#technologies)
   - [Setup](#setup)
