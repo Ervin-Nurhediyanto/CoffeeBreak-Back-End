@@ -34,7 +34,7 @@ const products = {
         if (limit != null) {
           pageProduct = `LIMIT ${limit} OFFSET ${(page - 1) * limit}`
         } else {
-          pageProduct = `LIMIT 3 OFFSET ${(page - 1) * 3}`
+          pageProduct = `LIMIT 6 OFFSET ${(page - 1) * 6}`
         }
       }
       if (sort === 'new') {

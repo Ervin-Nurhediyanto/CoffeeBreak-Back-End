@@ -26,7 +26,7 @@ const products = {
     productModels.getAllproduct(search, sort, order, page, limit)
       .then((result) => {
         if (result != '') {
-          helpers.response(res, result, 200, null)
+          helpers.response(res, page, result, 200, null)
         } else {
           helpers.response(res, 'Produk yang anda cari tidak ada', 404, 'error')
         }
